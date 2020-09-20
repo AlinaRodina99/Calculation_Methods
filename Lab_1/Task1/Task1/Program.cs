@@ -202,7 +202,7 @@ namespace Task1
             }
         }
 
-        static void Main(string[] args)
+        static void Main(string[] _)
         {
             Console.WriteLine($"******Topic of laboratory work: {laboratoryTopic}******");
             Console.WriteLine("Task parameters:");
