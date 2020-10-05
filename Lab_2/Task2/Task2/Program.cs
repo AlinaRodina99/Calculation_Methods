@@ -90,6 +90,57 @@ namespace Task2
             return lagrFormula;
         }
 
+        private static double CalculateNewtonFormula()
+        {
+            var sortedNodes = SelectLeastRemoteFromInterpolationPointNodes();
+            var valuesOfNodes = new List<double>();
+
+            foreach (var node in sortedNodes)
+            {
+                valuesOfNodes.Add(Function(node));
+            }
+
+            var dividedDifferencies = new List<List<double>>();
+
+            for (var i = 1; i <= sortedNodes.Count; ++i)
+            {
+                var differencies_i = new List<double>();
+
+                for (var j = 0; j < sortedNodes.Count - i; ++j)
+                {
+                    if (i == 1)
+                    {
+                        differencies_i.Add((valuesOfNodes[j + 1] - valuesOfNodes[j]) / (sortedNodes[j + 1] - sortedNodes[j]));
+                    }
+                    else
+                    {
+                        differencies_i.Add((dividedDifferencies[i - 2][j + 1] - dividedDifferencies[i - 2][j]) / (sortedNodes[j + i] - sortedNodes[j]));
+                    }
+                }
+
+                if (differencies_i.Count != 0)
+                {
+                    dividedDifferencies.Add(differencies_i);
+                }
+            }
+
+            double newtonFormula = valuesOfNodes[0];
+
+            for (var i = 1; i <= dividedDifferencies.Count; ++i)
+            {
+                double summand = 1;
+                for (var j = 0; j < i; ++j)
+                {
+                    summand *= pointOfInterpolation - sortedNodes[j];
+                }
+
+                summand *= dividedDifferencies[i - 1][0];
+                newtonFormula += summand;
+            }
+
+            return newtonFormula;
+        }
+
         static void Main(string[] _)
         {
             Console.WriteLine("******Task of algebraic interpolation******");
@@ -138,6 +189,9 @@ namespace Task2
                 var valueOfLagrangianFormula = CalculateLagrangeFormula();
                 Console.WriteLine($"Value of Lagrangian formula = {valueOfLagrangianFormula}");
                 Console.WriteLine($"Absolute value of actual error: {Math.Abs(Function(pointOfInterpolation) - valueOfLagrangianFormula)}");
+                var valueOfNewtonFormula = CalculateNewtonFormula();
+                Console.WriteLine($"Value of Newton formula = {valueOfNewtonFormula}");
+                Console.WriteLine($"Absolute value of actual error: {Math.Abs(Function(pointOfInterpolation) - valueOfNewtonFormula)}");
                 Console.WriteLine("Do you want to continue working of program? Enter yes or no: ");
                 var input = Convert.ToString(Console.ReadLine());
 
