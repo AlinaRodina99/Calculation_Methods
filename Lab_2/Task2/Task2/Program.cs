@@ -77,7 +77,7 @@ namespace Task2
             return l_k / denumerator;
         }
 
-        private static double CalculateLagrangianFormula()
+        private static double CalculateLagrangeFormula()
         {
             var sortedNodes = SelectLeastRemoteFromInterpolationPointNodes();
             double lagrFormula = 0;
@@ -94,13 +94,13 @@ namespace Task2
         {
             Console.WriteLine("******Task of algebraic interpolation******");
             Console.WriteLine($"Task option: {numberOfOption}");
-            Console.WriteLine("Enter number of interpolation nodes: ");
-            numberOfNodes = Convert.ToInt32(Console.ReadLine());
-            maxDegreeOfPolynomial = numberOfNodes - 1;
             Console.WriteLine("Enter left border of the segment: ");
             A = Convert.ToDouble(Console.ReadLine());
             Console.WriteLine("Enter right border of the segment: ");
             B = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Enter number of interpolation nodes: ");
+            numberOfNodes = Convert.ToInt32(Console.ReadLine());
+            maxDegreeOfPolynomial = numberOfNodes - 1;
             Console.WriteLine();
 
             Console.WriteLine("Table of values: ");
@@ -135,7 +135,7 @@ namespace Task2
                 }
 
                 Console.WriteLine();
-                var valueOfLagrangianFormula = CalculateLagrangianFormula();
+                var valueOfLagrangianFormula = CalculateLagrangeFormula();
                 Console.WriteLine($"Value of Lagrangian formula = {valueOfLagrangianFormula}");
                 Console.WriteLine($"Absolute value of actual error: {Math.Abs(Function(pointOfInterpolation) - valueOfLagrangianFormula)}");
                 Console.WriteLine("Do you want to continue working of program? Enter yes or no: ");
