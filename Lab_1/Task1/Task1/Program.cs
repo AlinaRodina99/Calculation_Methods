@@ -188,7 +188,7 @@ namespace Task1
                     N++;
                     firstX = secondX;
                     secondX = thirdX;
-                    thirdX = secondX - Function(secondX) / (Function(secondX) - Function(firstX));
+                    thirdX = secondX - Function(secondX) * (secondX - firstX) / (Function(secondX) - Function(firstX));
                 }
 
                 var Δ = Math.Abs(thirdX - secondX);
