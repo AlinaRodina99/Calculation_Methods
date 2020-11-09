@@ -18,22 +18,6 @@ namespace Task3._1
             return Math.Exp(-x) - Math.Pow(x, 2) / 2;
         }
 
-        private static List<double> CalculateNodes()
-        {
-            var list = new List<double>();
-
-            for (var i = 0; i < numberOfNodes; i++)
-            {
-                var x = A + i * (B - A) / numberOfNodes;
-                list.Add(x);
-            }
-
-            return list;
-        }
-
-
-
-
         static void Main(string[] args)
         {
             Console.WriteLine("********Задача обратного интерполирования********");
@@ -53,9 +37,7 @@ namespace Task3._1
                 accuracy = Convert.ToDouble(Console.ReadLine());
             }
 
-            Console.WriteLine("Введите точку для обратного интерполирования: ");
-            F = Convert.ToDouble(Console.ReadLine());
-            var firstSolve = new FirstSolve(A, B, numberOfNodes, accuracy);
+            var firstSolve = new FirstSolve(A, B, numberOfNodes);
             var table = firstSolve.CalculateNodes();
             Console.WriteLine("Таблица значений для заданной функции: ");
 
@@ -77,7 +59,7 @@ namespace Task3._1
             Console.WriteLine($"Введите степень многочлена, которая меньше либо равна {numberOfNodes - 1}");
             degreeOfPolynomial = Convert.ToInt32(Console.ReadLine());
 
-            firstSolve.degreeOfPolynomial = degreeOfPolynomial;
+            firstSolve.DegreeOfPolynomial = degreeOfPolynomial;
             firstSolve.F = F;
 
             var newtonFormula = firstSolve.CalculateNewtonFormula();

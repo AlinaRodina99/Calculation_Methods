@@ -1,28 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace Task3._1
 {
     public class FirstSolve
     {
-        private static double A;
-        private static double B;
-        private static int numberOfNodes;
-        private static double accuracy;
-        public double F;
-        public int degreeOfPolynomial;
+        private readonly double A;
+        private readonly double B;
+        private readonly int numberOfNodes;
 
+        public int DegreeOfPolynomial { get; set; }
 
-        public FirstSolve(double A, double B, int numberOfNodes, double accuracy)
+        public double F { get; set; }
+
+        public FirstSolve(double A, double B, int numberOfNodes)
         {
-            FirstSolve.A = A;
-            FirstSolve.B = B;
-            FirstSolve.numberOfNodes = numberOfNodes;
-            FirstSolve.accuracy = accuracy;
+            this.A = A;
+            this.B = B;
+            this.numberOfNodes = numberOfNodes;
         }
 
         private static double Function(double x)
@@ -68,7 +64,7 @@ namespace Task3._1
 
             listOfDistancesFromInterpolationPoint.Sort();
 
-            for (var i = 0; i <= degreeOfPolynomial; i++)
+            for (var i = 0; i <= DegreeOfPolynomial; i++)
             {
                 sortedListOfNodes.Add(listOfDistancesFromInterpolationPoint.ToArray()[i].Item2);
             }
