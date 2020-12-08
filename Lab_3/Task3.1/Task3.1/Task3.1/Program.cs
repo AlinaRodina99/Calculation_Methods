@@ -33,8 +33,6 @@ namespace Task3._1
                 B = Convert.ToDouble(Console.ReadLine());
                 Console.WriteLine("Введите количество узлов: ");
                 numberOfNodes = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Введите заданную точность: ");
-                accuracy = Convert.ToDouble(Console.ReadLine());
             }
 
             var firstSolve = new FirstSolve(A, B, numberOfNodes);
@@ -62,10 +60,31 @@ namespace Task3._1
             firstSolve.DegreeOfPolynomial = degreeOfPolynomial;
             firstSolve.F = F;
 
-            var newtonFormula = firstSolve.CalculateNewtonFormula();
-            Console.WriteLine($"Значение аргумента для F: {newtonFormula}");
-            var absDiscrepancy = Math.Abs(Function(newtonFormula) - F);
-            Console.WriteLine($"Значение модуля невязки: {absDiscrepancy}");
+            Console.WriteLine("Выберите способ решения задачи обратного интерполирования: 1 - свести задачу к алгебраическому интерполированию, находя значение " +
+                "обратной функции в заданной точке, 2 - свести задачу к решению уравнения P(x) - F = 0 методом бисекции");
+            var way = Convert.ToInt32(Console.ReadLine());
+
+            if (way == 1)
+            {
+                var newtonFormula = firstSolve.CalculateNewtonFormula();
+                Console.WriteLine($"Значение аргумента для F: {newtonFormula}");
+                var absDiscrepancy = Math.Abs(Function(newtonFormula) - F);
+                Console.WriteLine($"Значение модуля невязки: {absDiscrepancy}");
+            }
+            else
+            {
+                var secondSolve = new SecondSolve(A, B, numberOfNodes, accuracy);
+                secondSolve.F = F;
+                var listOfSegments = secondSolve.RootSeparation();
+                var list = secondSolve.BisectionMethod(listOfSegments);
+                
+                foreach (var root in list)
+                {
+                    Console.WriteLine($"Значение аргумента для F: {root}");
+                    var absDiscrepancy = Math.Abs(Function(root) - F);
+                    Console.WriteLine($"Значение модуля невязки: {absDiscrepancy}");
+                }
+            }
         }
     }
 }
