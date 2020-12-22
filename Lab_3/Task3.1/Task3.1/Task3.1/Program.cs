@@ -18,7 +18,7 @@ namespace Task3._1
             return Math.Exp(-x) - Math.Pow(x, 2) / 2;
         }
 
-        static void Main(string[] args)
+        static void Main(string[] _)
         {
             Console.WriteLine("********Задача обратного интерполирования********");
             Console.WriteLine($"Функция: {function}");
@@ -44,45 +44,45 @@ namespace Task3._1
                 Console.WriteLine($"x = {el.Item1}; f(x) = {el.Item2}");
             }
 
-            var swappedTable = firstSolve.SwapTable();
-            Console.WriteLine("Таблица для обратной функции: ");
-
-            foreach (var el in swappedTable)
+            while (true)
             {
-                Console.WriteLine($"x = {el.Item1}; f(x) = {el.Item2}");
-            }
-
-            Console.WriteLine("Введите точку для обратного интерполирования: ");
-            F = Convert.ToDouble(Console.ReadLine());
-            Console.WriteLine($"Введите степень многочлена, которая меньше либо равна {numberOfNodes - 1}");
-            degreeOfPolynomial = Convert.ToInt32(Console.ReadLine());
-
-            firstSolve.DegreeOfPolynomial = degreeOfPolynomial;
-            firstSolve.F = F;
-
-            Console.WriteLine("Выберите способ решения задачи обратного интерполирования: 1 - свести задачу к алгебраическому интерполированию, находя значение " +
-                "обратной функции в заданной точке, 2 - свести задачу к решению уравнения P(x) - F = 0 методом бисекции");
-            var way = Convert.ToInt32(Console.ReadLine());
-
-            if (way == 1)
-            {
+                Console.WriteLine("Введите точку для обратного интерполирования: ");
+                F = Convert.ToDouble(Console.ReadLine());
+                firstSolve.F = F;
+                Console.WriteLine($"Введите степень многочлена, которая меньше либо равна {numberOfNodes - 1}");
+                degreeOfPolynomial = Convert.ToInt32(Console.ReadLine());
+                firstSolve.DegreeOfPolynomial = degreeOfPolynomial;
                 var newtonFormula = firstSolve.CalculateNewtonFormula();
-                Console.WriteLine($"Значение аргумента для F: {newtonFormula}");
-                var absDiscrepancy = Math.Abs(Function(newtonFormula) - F);
-                Console.WriteLine($"Значение модуля невязки: {absDiscrepancy}");
-            }
-            else
-            {
-                var secondSolve = new SecondSolve(A, B, numberOfNodes, accuracy);
-                secondSolve.F = F;
+                Console.WriteLine($"Значение аргумента для F первым способом решения: {newtonFormula}");
+                var absDiscrepancy1 = Math.Abs(Function(newtonFormula) - F);
+                Console.WriteLine($"Значение модуля невязки для первого способа решения: {absDiscrepancy1}");
+                var secondSolve = new SecondSolve(A, B, numberOfNodes, accuracy)
+                {
+                    F = F,
+                    DegreeOfPolynomial = degreeOfPolynomial
+                };
                 var listOfSegments = secondSolve.RootSeparation();
                 var list = secondSolve.BisectionMethod(listOfSegments);
-                
+
                 foreach (var root in list)
                 {
-                    Console.WriteLine($"Значение аргумента для F: {root}");
-                    var absDiscrepancy = Math.Abs(Function(root) - F);
-                    Console.WriteLine($"Значение модуля невязки: {absDiscrepancy}");
+                    Console.WriteLine($"Значение аргумента для F вторым способом решения: {root}");
+                    var absDiscrepancy2 = Math.Abs(Function(root) - F);
+                    Console.WriteLine($"Значение модуля невязки для второго способа решения: {absDiscrepancy2}");
+                }
+                
+
+                Console.WriteLine("Хотите продолжить? Наберите да или нет:");
+                var input = Convert.ToString(Console.ReadLine());
+
+                if (input == "да")
+                {
+                    continue;
+                }
+                else
+                {
+                    Console.WriteLine("Программа заканчивает работу.");
+                    break;
                 }
             }
         }

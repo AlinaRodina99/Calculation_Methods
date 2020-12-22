@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Task3._1
 {
@@ -16,11 +14,11 @@ namespace Task3._1
 
         public double F { get; set; }
 
-        public SecondSolve(double A, double B, int numberOfNodes, double accuracy)
+        public SecondSolve(double A, double B, int numberOfNodes, double accuracy = 1.0e-9)
         {
             this.A = A;
             this.B = B;
-            this.accuracy = accuracy;
+            this.accuracy = 1.0e-9;
             this.numberOfNodes = numberOfNodes;
         }
 
@@ -29,14 +27,14 @@ namespace Task3._1
             return Math.Exp(-x) - Math.Pow(x, 2) / 2;
         }
 
-        private List<double> CalculateNodes()
+        public List<(double, double)> CalculateNodes()
         {
-            var list = new List<double>();
+            var list = new List<(double, double)>();
 
             for (var i = 0; i < numberOfNodes; i++)
             {
                 var x = A + i * (B - A) / numberOfNodes;
-                list.Add(x);
+                list.Add((x, Function(x)));
             }
 
             return list;
@@ -48,19 +46,19 @@ namespace Task3._1
             double denumerator = 1;
             var nodes = CalculateNodes();
 
-            foreach (var node in nodes)
+            for (var i = 0; i <= DegreeOfPolynomial; ++i)
             {
-                if (kNode != node)
+                if (kNode != nodes[i].Item1)
                 {
-                    l_k *= (x - node);
+                    l_k *= x - nodes[i].Item1;
                 }
             }
 
-            foreach (var node in nodes)
+            for (var i = 0; i <= DegreeOfPolynomial; ++i)
             {
-                if (kNode != node)
+                if (kNode != nodes[i].Item1)
                 {
-                    denumerator *= (kNode - node);
+                    denumerator *= kNode - nodes[i].Item1;
                 }
             }
 
@@ -72,9 +70,9 @@ namespace Task3._1
             double lagrFormula = 0;
             var nodes = CalculateNodes();
 
-            foreach (var node in nodes)
+            for (var i = 0; i <= DegreeOfPolynomial; ++i)
             {
-                lagrFormula += CalculateLForEachKNode(node, x) * Function(node);
+                lagrFormula += CalculateLForEachKNode(nodes[i].Item1, x) * Function(nodes[i].Item1);
             }
 
             return lagrFormula - F;
