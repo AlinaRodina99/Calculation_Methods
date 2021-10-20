@@ -17,7 +17,7 @@ def max_not_diagonal(matrix):
     return curr_i, curr_j
 
 
-def jacobi_method(matrix,epsilon,strategy): #метод Якоби 
+def jacobi_method(matrix,epsilon,strategy): 
         iterations = 0
         i = 0
         j = 0
