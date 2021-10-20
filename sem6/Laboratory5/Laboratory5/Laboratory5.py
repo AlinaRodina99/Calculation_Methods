@@ -26,7 +26,7 @@ def scalar_product(matrix, epsilon, x_0):
         x_0 = x_1
         y_0 = y_1
         x_1 = matrix @ x_1
-        y_1 = matrix @ y_1
+        y_1 = matrix.T @ y_1
         lambda_1 = np.dot(x_1, y_1) / np.dot(x_0, y_1)
         if abs(lambda_1-lambda_0) < epsilon or iterations > 5000:
             break
