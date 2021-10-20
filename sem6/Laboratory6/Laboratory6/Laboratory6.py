@@ -71,7 +71,7 @@ def print_report(matrix):
         print("Погрешность в найденном вектор с.ч. c помощью стратегии цикла:", norm(np.sort(jacobi_method(matrix, 10 ** (-i), "circle")[0]) - np.sort(eig(matrix)[0])))
         print("Число итераций:", jacobi_method(matrix, 10 ** (-i), "circle")[1])
         print('\n')
-        print("Проверим, попали ли с.ч., найденные с помощью стратегии максимального недиагонального элемента:")
+    print("Проверим, попали ли с.ч., найденные с помощью стратегии максимального недиагонального элемента:")
     for el in jacobi_method(matrix, 10 ** (-5), "max")[0]:
         is_in_gersh_circle(matrix, el)
     print('\n')
@@ -87,17 +87,17 @@ def main():
               [0.049099,4.308033,-12.970687]])
     print(matrix_1)
     print_report(matrix_1)
-
+    print('\n')
     print("Матрица Гильберта 3-го порядка:")
     matrix_2 = hilbert(3)
     print(matrix_2)
     print_report(matrix_2)
-
+    print('\n')
     print("Матрица Гильберта 4-го порядка:")
     matrix_3 = hilbert(4)
     print(matrix_3)
     print_report(matrix_3)
-
+    print('\n')
     print("Матрица Гильберта 10-го порядка:")
     matrix_4 = hilbert(10)
     print(matrix_4)
