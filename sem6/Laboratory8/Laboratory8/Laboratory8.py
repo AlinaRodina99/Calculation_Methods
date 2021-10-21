@@ -17,12 +17,16 @@ def p_n_k_first_der(n,k):
 def p_n_k_second_der(n,k): 
     return lambda t: derivative(p_n_k_first_der(n,k),t)
 
+def A_i(funs,phi,dphi,ddphi,i): #функции A_i из метода Галеркина
+    k,p,q,f = funs
+    return lambda x: k(x)*ddphi[i](x)+p(x)*dphi[i](x)+q(x)*phi[i](x)
+
 def galerkin(a, b,functions,N):
     k,p,q,f = functions
     phi = [p_n_k(i,1) for i in range(N)]
     dphi = [p_n_k_first_der(i,1) for i in range(N)]
     ddphi = [p_n_k_second_der(i,1) for i in range(N)]
-    A = np.array([lambda x: k(x)*ddphi[i](x)+p(x)*dphi[i](x)+q(x)*phi[i](x) for i in range(N)])
+    A = np.array([A_i(functions,phi,dphi,ddphi,i) for i in range(N)])
     C = np.array([quad(lambda t: f(t)*phi[i](t),a,b)[0] for i in range(N)])
     B = np.zeros([N,N])
     for i in range(N):
@@ -34,7 +38,7 @@ def galerkin(a, b,functions,N):
 def main():
     print("-(4-x/5-2x)u'' + ((1-x)/2)u' + 1/2 ln(3+x) u = 1 +x/3, u(-1)=u(1)=0")
     functions_0 = []
-    functions_0.append(lambda x: -((4-x)/(5-2*x)))
+    functions_0.append(lambda x: -(4-x)/(5-2*x))
     functions_0.append(lambda x: (1-x)/2)
     functions_0.append(lambda x: 1/2 * log(3 + x))
     functions_0.append(lambda x: 1 + x/3)
@@ -86,9 +90,9 @@ def main():
 
     print("-(7-x/8+3x)u'' + (1 + x/3)u' + (1-1/2 * e^(x/2)) u = 1/2 - x/3, u(-1)=u(1)=0")
     functions_2 = []
-    functions_2.append(lambda x: -((7-x)/(8+3*x)))
+    functions_2.append(lambda x: -(7-x)/(8+3*x))
     functions_2.append(lambda x: 1 + x/3)
-    functions_2.append(lambda x: 1 - 0.5 * exp(x/2))
+    functions_2.append(lambda x: (1 - exp(x/2))/2)
     functions_2.append(lambda x: 0.5 - x/3)
     fig, axes = plt.subplots(3, 2, figsize=(20, 15))
     fig, axes = plt.subplots(3, 2, figsize=(20, 15))
