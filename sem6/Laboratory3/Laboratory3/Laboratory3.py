@@ -1,39 +1,40 @@
+import pandas as pd
 import numpy as np
 from numpy.linalg import norm, cond, solve, inv
 from scipy.linalg import hilbert
 
-def simple_iterations(matrix, b, x_0, epsilon):
-    c = np.zeros((matrix.shape[0], matrix.shape[1]))
-    d = np.zeros(b.shape[0])
-    for i in range(matrix.shape[0]):
-        d = b[i] / matrix[i][i]
-        for j in range(matrix.shape[1]):
+def iterational_method(alpha,beta,x0,eps): #общая схема итерационного метода
+    num_of_iters = 1
+    x1 = alpha @ x0 + beta
+    while (norm(x1-x0)>eps and num_of_iters < 500):
+        x0 = x1
+        x1 = alpha @ x0 + beta
+        num_of_iters += 1
+    return x1, num_of_iters
+
+def simple_iterational_method(a,b,x0,eps): #метод простых итераций
+    alpha = np.zeros([a.shape[0],a.shape[1]])
+    beta = np.zeros(b.shape[0])
+    for i in range(alpha.shape[0]):
+        for j in range(alpha.shape[1]):
             if i != j:
-                c[i][j] = -matrix[i][j] / matrix[i][i]
-    x_1 = c @ x_0 + d
-    iterations = 1
-    while(norm(x_1 - x_0) >= epsilon and iterations <= 200):
-        x_0 = x_1
-        x_1 = c @ x_0 + d 
-        iterations += 1
-    return x_1, iterations
+                alpha[i,j] = -a[i,j]/a[i,i]
+                beta[i] = b[i]/a[i,i]
+    return iterational_method(alpha,beta,x0,eps)
 
-def seidel(matrix, b, x_0, epsilon):
-    n = len(matrix)  
-    converge = False
-    x = x_0
-    iterations = 0
-    while (not converge and iterations <= 200):
-        x_new = np.copy(x)
-        for i in range(n):
-            s1 = sum(matrix[i][j] * x_new[j] for j in range(i))
-            s2 = sum(matrix[i][j] * x[j] for j in range(i + 1, n))
-            x_new[i] = (b[i] - s1 - s2) / matrix[i][i]
-
-        converge = norm(x_new[i] - x[i]) <= epsilon
-        x = x_new
-        iterations += 1
-    return x, iterations
+def seidel_method(a,b,x0,eps): #метод Зейделя
+    n, m = a.shape[0], a.shape[1]
+    l,r,d = [np.zeros([n,m]) for _ in range(3)]
+    for i in range(n):
+        for j in range(m):
+            if i > j:
+                l[i,j] = a[i,j]
+            elif i < j:
+                r[i,j] = a[i,j]
+            else:
+                d[i,j] = a[i,j]
+    beta = inv(d+l)
+    return iterational_method(-beta@r,beta@x0,x0,eps)
 
 def print_matrix(matrix):
     for i in range(matrix.shape[0]):
@@ -45,16 +46,16 @@ def print_report_simple_iterations(matrix, b):
     print("Метод простых итераций")
     for i in range(3, 12, 4):
         print("Текущий epsilon: ", 10 ** (-i))
-        print("Погрешность решения: ", norm(solve(matrix, b) - simple_iterations(matrix, b, b, 10**(-i))[0]))
-        print("Количество итераций: ", simple_iterations(matrix, b, b, 10**(-i))[1])
+        print("Погрешность решения: ", norm(solve(matrix, b) - simple_iterational_method(matrix, b, b, 10**(-i))[0]))
+        print("Количество итераций: ", simple_iterational_method(matrix, b, b, 10**(-i))[1])
     print('\n')
 
 def print_report_seidel(matrix, b):
     print("Метод Зейделя")
     for i in range(3, 12, 4):
         print("Текущий epsilon: ", 10 ** (-i))
-        print("Погрешность решения: ", norm(solve(matrix, b) - seidel(matrix, b, b, 10**(-i))[0]))
-        print("Количество итераций: ", seidel(matrix, b, b, 10**(-i))[1])
+        print("Погрешность решения: ", norm(solve(matrix, b) - seidel_method(matrix, b, b, 10**(-i))[0]))
+        print("Количество итераций: ", seidel_method(matrix, b, b, 10**(-i))[1])
     print('\n')
 
 def main():
