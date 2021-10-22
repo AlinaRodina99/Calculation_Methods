@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from numpy.linalg import norm, cond, solve, inv
 from scipy.linalg import hilbert
+import math
 
 def iterational_method(alpha,beta,x0,eps): #общая схема итерационного метода
     num_of_iters = 1
@@ -56,6 +57,15 @@ def print_report_seidel(matrix, b):
         print("Текущий epsilon: ", 10 ** (-i))
         print("Погрешность решения: ", norm(solve(matrix, b) - seidel_method(matrix, b, b, 10**(-i))[0]))
         print("Количество итераций: ", seidel_method(matrix, b, b, 10**(-i))[1])
+    print('\n')
+
+def print_report_relax_method(matrix, b):
+    print("Релаксационный метод")
+    for i in range(3, 12, 4):
+        print("Текущий epsilon: ", 10 ** (-i))
+        print(solve(matrix,b))
+        print("Погрешность решения: ", norm(solve(matrix, b) - relax_method(matrix, b, b, 10**(-i))[0]))
+        print("Количество итераций: ", relax_method(matrix, b, b, 10**(-i))[1])
     print('\n')
 
 def main():
